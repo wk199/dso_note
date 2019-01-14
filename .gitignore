@@ -13,4 +13,5 @@ thirdparty/libzip-1.1.1
 .toc
 .aux
 .log
+cmake-build-*
 
