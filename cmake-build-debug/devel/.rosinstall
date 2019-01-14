@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/devel/setup.sh

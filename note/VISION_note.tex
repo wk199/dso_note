@@ -1,0 +1,111 @@
+\documentclass[UTF8]{book}
+\usepackage{ctex}
+
+\usepackage{amssymb,amsmath,amsfonts} %公式包
+
+\usepackage{geometry}          % 用于页面设置
+\geometry{a4paper, scale=0.8}  % 设置为A4纸，边距0.8
+\usepackage{graphics}          % 与图形有关
+
+\usepackage{graphicx} % ⋯⋯导言区其他内容
+
+\usepackage{titlesec} %设置标题类型，参照：http://blog.sina.com.cn/s/blog_94d13e7501010pye.html
+\titleformat{\chapter}{\centering\Huge\bfseries}{第\,\thechapter\,章}{1em}{}
+
+
+\usepackage{indentfirst}
+\setlength{\parindent}{2em}
+
+%注意，CJK和ctex包的首行缩进不一样，参见：https://www.cnblogs.com/airbird/p/LaTex_1st_line_tab.html
+%\usepackage{indentfirst} %段首空两格
+%\setlength{\parindent}{4pt} %设置空任意数目的
+
+\usepackage{bibentry,natbib,plain}
+
+\title{\textbf{从DSO来看视觉里程计}}
+\author{文坤\\22}
+\date{} %系统会自动生成一个时间，通过该命令取消时间显示 
+
+\pagestyle{plain}  % 设置页码风格
+
+
+%设置插入代码的风格
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}  
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}  
+\definecolor{mymauve}{rgb}{0.58,0,0.82}  
+
+\usepackage{caption}
+\lstset{
+	language=C++,
+	basicstyle=\small\ttfamily,
+	numbers=left,   %行号
+	numbersep=5pt,
+	xleftmargin=20pt,
+	frame=shadowbox,
+	framexleftmargin=20pt
+}
+\renewcommand*\thelstnumber{\arabic{lstnumber}:}
+\DeclareCaptionFormat{mylst}{\hrule#1#2#3}
+\captionsetup[lstlisting]{format=mylst,labelfont=bf,singlelinecheck=off,labelsep=space}
+
+%
+%\lstset{ %  
+%	backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}  
+%	basicstyle=\footnotesize,        % the size of the fonts that are used for the code  
+%	breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace  
+%	breaklines=true,                 % sets automatic line breaking  
+%	captionpos=bl,                    % sets the caption-position to bottom  
+%	commentstyle=\color{mygreen},    % comment style  
+%	deletekeywords={...},            % if you want to delete keywords from the given language  
+%	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code  
+%	extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8  
+%	frame=single,                    % adds a frame around the code  
+%	keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)  
+%	keywordstyle=\color{blue},       % keyword style  
+%	%language=Python,                 % the language of the code  
+%	morekeywords={*,...},            % if you want to add more keywords to the set  
+%	numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)  
+%	numbersep=5pt,                   % how far the line-numbers are from the code  
+%	numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers  
+%	rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))  
+%	showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'  
+%	showstringspaces=false,          % underline spaces within strings only  
+%	showtabs=false,                  % show tabs within strings adding particular underscores  
+%	stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered  
+%	stringstyle=\color{orange},     % string literal style  
+%	tabsize=2,                       % sets default tabsize to 2 spaces  
+%	%title=myPython.py                   % show the filename of files included with \lstinputlisting; also try caption instead of title  
+%}  
+
+
+
+%==================================================== document ==========================================
+
+\begin{document}
+
+\maketitle %不添加该命令，就不显示标题。。xelatex
+
+\Large{\centerline{关于DSO}}
+\quad \par
+    Direct+Sparse的结合， 使得算法既能很好的适应场景，而且实时性也很好。本文档将从算法和代码的各个层面展现DSO算法的细节，综合各种已有的资料，力求完整详细。\\
+\thispagestyle{empty} %让本页剩余空白
+
+%------ 目录 ------
+\tableofcontents
+\thispagestyle{empty}
+
+%------ 正文开始 ----
+\mainmatter
+
+\input{slam_classify/ch_slam_classify.tex}
+
+\input{math/ch_math.tex}
+   
+\input{dso_theory/ch_dso_theory.tex}
+
+\input{code_analysis/ch_code_analysis.tex}
+
+\end{document}

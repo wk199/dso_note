@@ -1,0 +1,144 @@
+\chapter{DSO原理}
+
+\section{残差形式}	
+残差公式$r^k$是Host帧i到Target帧j上的匹配点的K的某个patch投影的residual:
+\begin{equation} \label{eq:residual}
+\begin{aligned} %等号对齐，但是会每一行都编号。 \begin{equation}则只编一个号
+r_{ij}^k &= r^k(x \boxplus \xi_{0})\\
+         &= I_{j}[p^{'}(T_{i},T_{j},d_{k},c)]-b_{j}-\frac{t_{j}e^{a_{j}}}{t_{i}e^{a_{i}}}(I_{i}(p^k)-b_{i}) \\ 
+\end{aligned}
+\end{equation}
+其中
+\begin{equation}
+\begin{aligned} \label{eq:p}
+p^{'} &= \pi(R\pi^{-1}(p,d_{p})+t)\\
+&= \pi(T_{j}T_{i}^{-1}\pi^{-1}(p,d_{p}))
+\end{aligned}
+\end{equation}
+而位姿的se(3)表示为
+\begin{equation}
+   T_{j}=exp(\hat{\xi}_{j}),T_{i}=exp(\hat{\xi}_{i})
+\end{equation}
+投影和反投影方程分别为
+\begin{align}
+	\pi(P)=(\frac{f_{x}P_{x}}{P_{z}}+c_{x},\frac{f_{y}P_{y}}{P_{z}}+c_{y})\\
+	\pi^{-1}(P,d_{p})=(\frac{p_{x}-c_{x}d_{p}}{f_{x}},\frac{p_{y}-c_{y}d_{p}}{f_{y}},d_{p})
+\end{align}
+注意：\\
+1、残差方程中，涉及到i、j两个时刻的pose。而基于feature point的slam中只于当前时刻的pose相关，将全局坐标系下面的point转换到当前帧下计算重投影误差。\\
+2、考虑了亮度值的仿射变换a、b。\\
+
+以上对应论文中的残差形式，而代码中涉及到更为细节，下面进行展开。
+这里考虑在优化时有两个关键帧，一个称为Host,一个称为Target。取Host帧中的一个像素点：
+
+\begin{equation}
+	x_{H}=[u_{H},v_{H},1]_{H}^{T}\\
+\end{equation}
+
+其中$u_{H},v_{H}$为该点的像素坐标系，使用齐次坐标为了方便矩阵运算。同时，点的逆深度为：
+\begin{equation}
+\rho_{H}=\frac{1}{d_{H}}\\
+\end{equation}
+
+在不考虑亮度放射变换时，点p从Host帧i变换到到Target帧j上的过程为：
+\begin{equation}
+\begin{matrix}
+    \overbrace{\rho_{T}^{-1} K^{-1} x_{T} =  T_{TW}}^{P_W}   \overbrace{T_{HW}^{-1} \frac{1}{\rho_{H}}K^{-1}x_{H}}^{P_W} \\ \\
+	\underbrace{\rho_{T}^{-1} K_{-1} x_{T}}_{p_T} =  \underbrace{T_{TW}T_{HW}^{-1}}_{T_{TH}}  \underbrace{\frac{1}{\rho_{H}}K^{-1}x_{H}}_{p_H}
+\end{matrix}
+\end{equation}
+
+将SE(3)形式展开
+\begin{equation}
+	T_{TH}=
+	\left[ \begin{array}{cc}
+	R_{TH} \quad t_{TH}\\
+	0      \quad  1
+	\end{array}
+	\right]
+\end{equation}
+代入上式得：\\
+\begin{equation}\label{eq:p1}
+	x_{T} = \frac{\rho_{T}}{\rho_{H}}(KR_{TH}K^{-1}x_{H}+Kt_{TH}\rho_{H})
+\end{equation}
+
+\noindent \textbf{注：}
+\begin{itemize}
+  \item [1)] 公式中省略了齐次坐标和非齐次坐标的转换过程。推导时请自行脑补。
+  \item [2)] 对于逆深度的操作，有些和常规习惯不同，但是代码中就是这样实现的，而且感觉挺方便的，后面会结合具体代码进行分析。
+  \item [3)] 公式(\ref{eq:p})中的$p^{'}$表示一个投影过程,而(\ref{eq:p1})的$x_{H}$表示从Host中变换到Target后的一个点，二者实质是一样的。即(\ref{eq:p1})是(\ref{eq:p})
+  的展开形式。
+\end{itemize} 
+
+
+
+%=========================================================================================================================
+\section{参数形式}  %注意，不识别中文的标点符号"、"，因此拆开写
+涉及到的参数为$\xi_{i}$、$\xi_{j}$、$d$、$c$、$a_{i}$、$a{j}$、$b_{i}$、$b_{j}$。其中$\xi_{i}$、$\xi_{j}\in SE(3)$ 为两帧的外参，d为point在其host帧中的深度， $c\in R^4$为相机的内参，$a_{i},a{j},b_{i},b_{j}$分别为光照参数。 \\
+\indent 按照Jacobian的结构可以分为2类，$T_{i}$、$T_{j}$、$d$、$c$= $(f_{x},f_{y},c_{x},c_{y})$为geometry参数$\delta_{geo}$,而$a_{i}$、$a_{j}$、$b_{i}$、$b_{j}$为photometric参数$\delta_{photo}$。\\
+\indent 每个点以某一个pattern来构成，pattern形式见论文"Figure 4.\textbf{Residual pattern}"。按照层级，参数又可以分为全局属性$c$、帧属性$\xi_{i}$、$\xi_{j}$、$ab_{i}$、$ab_{j}$，点属性$d_{k_i}$(注意，这里是$i$,表示的是点在host帧下面的深度)。自变量中$d$的数量是最多。\\
+\indent 同时，按照参数的来源的分类，即可以分为Host参数(下标为i，代码中表示为为h)和Target参数(下标为j，代码中表示为t)
+
+
+%========================================================================================================================
+\section{雅可比}
+Jacobian定义为：
+\begin{equation}
+	J_{k}=\frac{\partial r^k((\delta+x)\boxplus\xi_0)}{\partial\delta}
+\end{equation}
+论文里,根据残差形式(\ref{eq:residual})将其划分为两部分
+\begin{equation}
+	J_{k}=[\underbrace{\frac{\partial I_j}{\partial p^{'}}}_{J_I} \underbrace{\frac{\partial p^{'}(\delta+x)\boxplus\xi）}{\partial\delta_{geo}}}_{J_{geo}}, \underbrace{\frac{\partial r_{k}((\delta+x)\boxplus x_0)}{\partial\delta_{photo}}}_{J_{photo}}]
+\end{equation}
+其中，$J_I=\frac{\partial I_j}{\partial p^{'}}=(\frac{\partial I_j}{\partial p_x^{'}},\frac{\partial I_j}{\partial p_y^{'}})\in R_{1x2}$是当前像素的的亮度的梯度值\\
+在完整DSO中，雅可比由三部分组成：\\
+图像雅可比$J_I$，即图像梯度；\\
+几何雅可比$J_{geo}$，描述各量相对几何量，例如旋转和平移的变化率；\\
+光度雅可比$J_{photo}$，描述各个量相对光度参数的雅可比；\\
+
+\subsection{图像雅可比$J_I$}
+$J_I=\frac{\partial I_j}{\partial p^{'}}=\frac{\partial I_j}{\partial x_{T}}$即图像的梯度
+
+\subsection{几何雅可比$J_{geo}$}
+
+\subsubsection{对pose求导}
+几何部分包括相机的位姿和特征点的深度，需要对两部分求雅可比。\\
+\indent 记$\xi_{T}$和$\xi_{H}$分别为$T_{TW}$、$T_{HW}$的李代数形式,位姿部分的雅可比：
+\begin{equation}
+	\frac{\partial x_{H}}{\partial \xi_{T}}=
+	\left[	
+	\begin{matrix}
+		\rho_{T}f_{x} & 0 & -\rho_{T}uf_{x} & -uvf_{x} & (1+u^2)f_{x} & -vf_{x} \\
+		0 & \rho_{T}f_{y} & -f_{y}\rho_{T}v & -(1+v^2)f_{y} & f_{y}uv & f_{y}u  
+	\end{matrix}	
+	\right]
+\end{equation}
+
+\begin{equation}
+\frac{\partial x_{H}}{\partial \xi_{H}}= ????????
+\end{equation}
+
+\subsubsection{对逆深度求导}
+再考虑对Host帧中的逆深度$\rho_{H}$的雅可比:
+\begin{equation}
+\frac{\partial x_T}{\partial \rho_H}=
+\left[ \begin{matrix}
+\frac{\partial x_{T}}{\partial u} \quad \frac{\partial x_{T}}{\partial v}
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+\frac{\partial u}{\partial \rho_{H}}\\
+\frac{\partial v}{\partial \rho_{H}}
+\end{matrix}
+\right]
+\end{equation}
+
+\subsubsection{对相机内参求导}
+
+
+
+
+
+%========================================================================================================================
+\section{边缘化}

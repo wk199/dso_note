@@ -1,0 +1,108 @@
+\chapter{DSO代码分析--前端跟踪}
+
+整个项目代码量比较大，文件很多。而且作者为了提高计算效率，优化相关的部分，很多中间结果共用，也没有采用开源的优化库ceres、gtsam等，所有部分纯手撸。而且还进行了SSE加速，也没使用OpenCV中的算法。因此，代码及其复杂，还涉及到分厂多的参数，这些参数与作者的使用调试经验强相关。
+整个关键代码部分，可以分为三个部分：
+\begin{itemize}
+	\item  初始化
+	\item  帧间跟踪
+	\item  局部优化
+\end{itemize} 
+\paragraph{初始化} 作者在github的项目主页上说到，初始化并不是很鲁棒，用户可以自己实现自己的初始化操作。
+\paragraph{帧间跟踪} 帧间跟踪主要是进行图像对齐，计算帧间的pose，类似与特征点法这种的计算E或者F，然后分解得到Pose的过程。
+\paragraph{局部优化} 局部优化中做的事儿就有点儿多了，重头戏。
+
+
+%===================================================
+\section{标定矫正}
+
+
+%===================================================
+\section{系统初始化}
+
+
+%===================================================
+\section{帧间跟踪}	
+\vspace{0.2em}
+DSO中帧间跟踪时，只计算当前帧与前一个关键帧间的pose。
+\indent 完成粗跟踪的类是CoarseTracker，该类在FullSystem中共有两个对象，分别是coarseTracker\_forNewKF、coarseTracker。\\
+二者的区别是：\\
+\textbf{coarseTracker\_forNewKF}:更新存储关键帧的信息，包括refFrameID信息，在makeKeyFrame()函数中完成，且是在完成关键帧之后和边缘化之前;\\
+\textbf{coarseTracker}:所有帧的跟踪，新帧到来时，若coarseTracker\_forNewKF中的refFrameID被更新(即是否比coarseTracker中的大)，就将coarseTracker\_forNewKF赋给coarseTracker。若没有，coarseTracker维持之前的状态，即最后一个keyframe。
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{DSO代码分析--后端优化}
+后端优化在makeKeyFrame()中，依次有十几项步骤：
+
+
+
+%=================================================================================
+\section{点的深度计算}
+关键点的深度的计算都在后端完成，前端之负责计算两帧间的pose的初值。分为两步：
+\begin{itemize}
+	\item [1)] 通过深度滤波器更新点的深度范围，直到点的深度收敛，作为深度的初值。
+	\item [2)] 在完成帧间pose的优化后，进一步优化点的深度值。
+\end{itemize} 
+
+
+\subsection{深度滤波}
+通过深度滤波器完成深度范围的更新，在函数ImmaturePoint::traceOn()中，主要维持两个变量:idepth\_min、idepth\_min。将点投影到Target帧中，形成对应的两个点ptpMin、ptpMax，如果两个点的距离小于一定的阈值，则认为该点深度收敛：
+\begin{lstlisting}[caption={  ImmaturePoint::traceOn()}]  
+Vec3f pr = hostToFrame_KRKi * Vec3f(u,v, 1);
+Vec3f ptpMin = pr + hostToFrame_Kt*idepth_min;		
+.....
+Vec3f ptpMax;
+ptpMax = pr + hostToFrame_Kt*idepth_max;
+......
+if(!(uMax > 4 && vMax > 4 && uMax < wG[0]-5 && vMax < hG[0]-5))
+{
+  if(debugPrint) printf("OOB uMax  %f %f - %f %f!\n",u,v, uMax, vMax);
+  lastTraceUV = Vec2f(-1,-1);
+  lastTracePixelInterval=0;
+  
+  return lastTraceStatus = ImmaturePointStatus::IPS_OOB;
+}
+\end{lstlisting}  
+
+\noindent 对深度进行深度更新：
+\begin{equation}
+\begin{aligned}
+u-\delta e dx &= \frac{(pr + \rho_{min}Kt)[0]}{(pr + \rho_{min}Kt)[2]}\\
+u+\delta e dx &= \frac{(pr + \rho_{max}Kt)[0]}{(pr + \rho_{max}Kt)[2]}
+\end{aligned}
+\end{equation}
+式中，$pr=KR_{TH}K^{-1}*p_{H}$是点从Host帧中旋转到Target帧后的样子(即Point Rotation的简写)，未考虑平移。平移和深度相关，深度相关的和前面重点强调的是一样的。
+变形后得到代码中的形式：
+\begin{equation}
+\begin{aligned}
+\rho_{min}  &= \frac{(pr[2]*(u-\delta e dx)-pr[0]}{(kt)[0] - (Kt)[2]*(u-\delta e dx)}\\
+\rho_{max}  &= \frac{(pr[2]*(u+\delta e dx)-pr[0]}{(kt)[0] - (Kt)[2]*(u+\delta e dx)}
+\end{aligned}
+\end{equation}
+
+\subsection{深度优化}
+在优化时，会专门对深度进行优化
+
+
+%==============================================================================================================
+\section{Bundle Adjustment}
+\indent 这一部分是整篇中最为核心的地方。作者将Hessian矩阵分为active、linear、marginal三部分。
+在AccumulatedTopHessianSSE::addPoint()函数中，模板参数mode的值0、1、2分别表示active、linearized、marginalize。但是经测试linearized下面的实际部分并未执行，作者在逻辑中将其屏蔽掉了。
+\subsection*{active部分}
+
+\subsection*{marginal部分}
+
+\section{边缘化}
+
+
+\chapter{代码细节}
+\section{比例因子}
+代码中好多地方出现比例因子，这些因子作用是提高求解方程式 $$ H\bigtriangleup\!x=b $$的数值稳定性和精确度.\\
+出现的地方：\\
+1、方程求解的过程中\\
+2、FrameHessian中\\
