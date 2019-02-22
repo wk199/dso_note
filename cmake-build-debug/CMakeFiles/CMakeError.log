@@ -1,22 +1,22 @@
 Determining if the pthread_create exist failed with the following output:
 Change Dir: /home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_564c2/fast"
-/usr/bin/make -f CMakeFiles/cmTC_564c2.dir/build.make CMakeFiles/cmTC_564c2.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_8ce8f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8ce8f.dir/build.make CMakeFiles/cmTC_8ce8f.dir/build
 make[1]: Entering directory '/home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_564c2.dir/CheckSymbolExists.c.o
-/usr/bin/cc     -o CMakeFiles/cmTC_564c2.dir/CheckSymbolExists.c.o   -c /home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp/CheckSymbolExists.c
-Linking C executable cmTC_564c2
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_564c2.dir/link.txt --verbose=1
-/usr/bin/cc       CMakeFiles/cmTC_564c2.dir/CheckSymbolExists.c.o  -o cmTC_564c2 -rdynamic 
-CMakeFiles/cmTC_564c2.dir/CheckSymbolExists.c.o: In function `main':
+Building C object CMakeFiles/cmTC_8ce8f.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_8ce8f.dir/CheckSymbolExists.c.o   -c /home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_8ce8f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8ce8f.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_8ce8f.dir/CheckSymbolExists.c.o  -o cmTC_8ce8f -rdynamic 
+CMakeFiles/cmTC_8ce8f.dir/CheckSymbolExists.c.o: In function `main':
 CheckSymbolExists.c:(.text+0x16): undefined reference to `pthread_create'
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_564c2.dir/build.make:97: recipe for target 'cmTC_564c2' failed
-make[1]: *** [cmTC_564c2] Error 1
+CMakeFiles/cmTC_8ce8f.dir/build.make:97: recipe for target 'cmTC_8ce8f' failed
+make[1]: *** [cmTC_8ce8f] Error 1
 make[1]: Leaving directory '/home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_564c2/fast' failed
-make: *** [cmTC_564c2/fast] Error 2
+Makefile:126: recipe for target 'cmTC_8ce8f/fast' failed
+make: *** [cmTC_8ce8f/fast] Error 2
 
 File /home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
 /* */
@@ -36,20 +36,20 @@ int main(int argc, char** argv)
 Determining if the function pthread_create exists in the pthreads failed with the following output:
 Change Dir: /home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_9b25d/fast"
-/usr/bin/make -f CMakeFiles/cmTC_9b25d.dir/build.make CMakeFiles/cmTC_9b25d.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_8ae22/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8ae22.dir/build.make CMakeFiles/cmTC_8ae22.dir/build
 make[1]: Entering directory '/home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_9b25d.dir/CheckFunctionExists.c.o
-/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_9b25d.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
-Linking C executable cmTC_9b25d
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9b25d.dir/link.txt --verbose=1
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_9b25d.dir/CheckFunctionExists.c.o  -o cmTC_9b25d -rdynamic -lpthreads 
+Building C object CMakeFiles/cmTC_8ae22.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_8ae22.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_8ae22
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8ae22.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_8ae22.dir/CheckFunctionExists.c.o  -o cmTC_8ae22 -rdynamic -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-CMakeFiles/cmTC_9b25d.dir/build.make:97: recipe for target 'cmTC_9b25d' failed
-make[1]: *** [cmTC_9b25d] Error 1
+CMakeFiles/cmTC_8ae22.dir/build.make:97: recipe for target 'cmTC_8ae22' failed
+make[1]: *** [cmTC_8ae22] Error 1
 make[1]: Leaving directory '/home/wk/VisionSpace/slam_os/src/dso/cmake-build-debug/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_9b25d/fast' failed
-make: *** [cmTC_9b25d/fast] Error 2
+Makefile:126: recipe for target 'cmTC_8ae22/fast' failed
+make: *** [cmTC_8ae22/fast] Error 2
 
 

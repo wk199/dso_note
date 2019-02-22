@@ -866,8 +866,9 @@ void FullSystem::addActiveFrame( ImageAndExposure* image, int id )
 	else	// do front-end operation.
 	{
 		// =========================== SWAP tracking reference?. =========================
-        //-- coarseTracker_forNewKF是在优化中makeKeyfrmae更新的
-        //-- 即前一帧不是关键帧时，这一帧的coarseTracker也不更新
+        //-- coarseTracker_forNewKF是在makeKeyfrmae中更新的，即当前帧被设置为关键帧; coarseTracker只在这里进行更新
+        //-- coarseTracker_forNewK用于关键帧跟踪， coarseTracker用于每一帧跟踪
+        //-- 前一帧是关键帧时，本帧的coarseTracker就更新，即参考帧修改为前一帧
 		if(coarseTracker_forNewKF->refFrameID > coarseTracker->refFrameID)
 		{
 			boost::unique_lock<boost::mutex> crlock(coarseTrackerSwapMutex);
@@ -1065,6 +1066,7 @@ void FullSystem::makeKeyFrame( FrameHessian* fh)
 		fh->setEvalPT_scaled(fh->shell->camToWorld.inverse(),fh->shell->aff_g2l);
 	}
 
+	//-- 点的深度更新
 	traceNewCoarse(fh);
 
 	boost::unique_lock<boost::mutex> lock(mapMutex);

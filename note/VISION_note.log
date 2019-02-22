@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.12.4)  31 DEC 2018 01:32
+This is XeTeX, Version 3.14159265-2.6-0.99999 (TeX Live 2018) (preloaded format=xelatex 2018.12.4)  23 FEB 2019 06:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1382,15 +1382,71 @@ Chapter 1.
 ]
 Chapter 2.
 
-Underfull \hbox (badness 10000) in paragraph at lines 23--24
+Underfull \hbox (badness 10000) in paragraph at lines 17--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--26
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--26
+
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 29--30
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--52
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [3]
-Underfull \hbox (badness 10000) in paragraph at lines 52--55
+ [4]
+[5]
+Underfull \hbox (badness 10000) in paragraph at lines 102--103
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--107
+
+ []
+
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 139--140
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 147--150
 
  []
 
@@ -1400,26 +1456,26 @@ File: math/img/1.png Graphic file (type bmp)
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 64--68
+Underfull \hbox (badness 10000) in paragraph at lines 159--163
 
  []
 
-) (./dso_theory/ch_dso_theory.tex [4] [5] [6
-
-]
+) (./dso_theory/ch_dso_theory.tex [7] [8]
 Chapter 3.
 
-Underfull \hbox (badness 10000) in paragraph at lines 26--30
+Underfull \hbox (badness 10000) in paragraph at lines 29--33
 
  []
 
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 59--61
+[9
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 62--64
 
  []
 
-[8]
-Overfull \hbox (5.99472pt too wide) in paragraph at lines 77--81
+[10]
+Overfull \hbox (5.99472pt too wide) in paragraph at lines 80--84
 []\TU/FandolSong-Regular(0)/m/n/15.05624 每 个 点 以 某 一 个 \TU/lmr/m/n/15.05624 pat
 tern \TU/FandolSong-Regular(0)/m/n/15.05624 来 构 成，| \TU/lmr/m/n/15.05624 patter
 n \TU/FandolSong-Regular(0)/m/n/15.05624 形 式 见 论 文\TU/lmr/m/n/15.05624 ”Figure 
@@ -1428,18 +1484,26 @@ n \TU/FandolSong-Regular(0)/m/n/15.05624 形 式 见 论 文\TU/lmr/m/n/15.05624
 
 Missing character: There is no ） in font [lmroman17-regular]:mapping=tex-text;!
 
-Underfull \hbox (badness 10000) in paragraph at lines 92--98
+Underfull \hbox (badness 10000) in paragraph at lines 95--101
 
  []
 
-[9]) (./code_analysis/ch_code_analysis.tex [10]
+[11]) (./code_analysis/ch_code_analysis.tex [12]
 Chapter 4.
-[11
 
-] [12]
+Overfull \hbox (0.2635pt too wide) in paragraph at lines 26--32
+\TU/lmr/m/n/15.05624 coarseTracker\TU/FandolSong-Regular(0)/m/n/15.05624 。|  若 
+没 有，| \TU/lmr/m/n/15.05624 coarseTracker \TU/FandolSong-Regular(0)/m/n/15.05624
+ 维 持 之 前 的 状 态，|  即 最 后 一 个 \TU/lmr/m/n/15.05624 keyframe\TU/FandolSong-Regular
+(0)/m/n/15.05624 。|
+ []
+
+[13
+
+] [14]
 Chapter 5.
 
-Overfull \hbox (7.18285pt too wide) in paragraph at lines 54--55
+Overfull \hbox (7.18285pt too wide) in paragraph at lines 55--56
 []\TU/FandolSong-Regular(0)/m/n/15.05624 通 过 深 度 滤 波 器 完 成 深 度 范 围 的 更 新，|  在 函
  数 \TU/lmr/m/n/15.05624 ImmaturePoint::traceOn()
  []
@@ -1462,26 +1526,26 @@ Overfull \hbox (7.18285pt too wide) in paragraph at lines 54--55
 . - 'small caps'  (m/sc) with NFSS spec.: 
 .................................................
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <9.03374> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 62.
-[13
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 63.
+[15
 
-] [14]
+] [16]
 Chapter 6.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 105--110
+Underfull \hbox (badness 10000) in paragraph at lines 106--110
 
  []
 
-[15
+[17
 
 ] (./VISION_note.aux) ) 
 Here is how much of TeX's memory you used:
- 19294 strings out of 492970
- 412846 string characters out of 6132678
+ 19352 strings out of 492970
+ 417453 string characters out of 6132678
  526645 words of memory out of 5000000
- 23044 multiletter control sequences out of 15000+600000
+ 23102 multiletter control sequences out of 15000+600000
  538409 words of font info for 90 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 53i,14n,74p,10417b,1697s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 53i,16n,74p,10417b,1697s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on VISION_note.pdf (19 pages).
+Output written on VISION_note.pdf (21 pages).

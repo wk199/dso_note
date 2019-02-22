@@ -1,8 +1,0 @@
-prefix=/home/wk/catkin_ws/src/dso/cmake-build-debug/devel
-
-Name: DSO
-Description: Description of DSO
-Version: 0.0.1
-Cflags: 
-Libs: -L/home/wk/catkin_ws/src/dso/cmake-build-debug/devel/lib 
-Requires: roscpp std_msgs tf nav_msgs sensor_msgs geometry_msgs eigen_conversions tf_conversions random_numbers message_runtime image_transport cv_bridge message_filters pcl_conversions pcl_ros std_srvs

@@ -8,7 +8,7 @@
 	\item  局部优化
 \end{itemize} 
 \paragraph{初始化} 作者在github的项目主页上说到，初始化并不是很鲁棒，用户可以自己实现自己的初始化操作。
-\paragraph{帧间跟踪} 帧间跟踪主要是进行图像对齐，计算帧间的pose，类似与特征点法这种的计算E或者F，然后分解得到Pose的过程。
+\paragraph{帧间跟踪} 帧间跟踪主要是进行图像对齐，计算帧间的pose，类似基于特征点法计算H或者F分解得到Pose的过程，同时还要更新点的深度信息。
 \paragraph{局部优化} 局部优化中做的事儿就有点儿多了，重头戏。
 
 
@@ -23,11 +23,12 @@
 %===================================================
 \section{帧间跟踪}	
 \vspace{0.2em}
-DSO中帧间跟踪时，只计算当前帧与前一个关键帧间的pose。
+DSO中帧间跟踪时，只计算当前帧与前一个\textbf{关键帧}间的pose，即粗略跟踪。\\
 \indent 完成粗跟踪的类是CoarseTracker，该类在FullSystem中共有两个对象，分别是coarseTracker\_forNewKF、coarseTracker。\\
 二者的区别是：\\
-\textbf{coarseTracker\_forNewKF}:更新存储关键帧的信息，包括refFrameID信息，在makeKeyFrame()函数中完成，且是在完成关键帧之后和边缘化之前;\\
-\textbf{coarseTracker}:所有帧的跟踪，新帧到来时，若coarseTracker\_forNewKF中的refFrameID被更新(即是否比coarseTracker中的大)，就将coarseTracker\_forNewKF赋给coarseTracker。若没有，coarseTracker维持之前的状态，即最后一个keyframe。
+\textbf{coarseTracker}:用于所有帧的跟踪，每一个非关键帧到来时，都计算相对于coarseTracker中保存的关键帧的相对pose。两个关键帧间的所有非关键帧使用的coarseTracker对象是同一个。\\
+\textbf{coarseTracker\_forNewKF}:用于更新存储当前关键帧的信息。即当前帧是关键帧时，更新该对象，然后在下一帧(非关键帧)到来时，复制给coarseTracker对象。更新的信息包括refFrameID信息，在makeKeyFrame()函数中完成，且是在完成关键帧之后和边缘化之前。\\
+\indent 新帧到来时，若coarseTracker\_forNewKF中的refFrameID比coarseTracker中的refFrameID大(因为其在前一关键帧中被更新，而coarseTracker中保存的还是前前关键帧)，就将coarseTracker\_forNewKF赋给coarseTracker。若没有，coarseTracker维持之前的状态，即最后一个keyframe。更新过程只发生在关键帧及其下一帧中间。
 
 
 
